@@ -1,6 +1,7 @@
 import sqlalchemy as db
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.exc import OperationalError
 import os
 from typing import Optional
 from table_schemas import Base, main_table_name
@@ -66,6 +67,26 @@ class LocalDb:
             self.is_ok = False
             app_log.error(f"Can not create table: `{ex}`")
 
+    def add_column_main(self, column_name, column_type):
+        try:
+            self._db_engine.execute(f"ALTER TABLE {self._main_table_name} "
+                                    f"ADD COLUMN {column_name} {column_type}")
+            app_log.info(f"Column `{column_name}` created")
+        except OperationalError:
+            app_log.info(f"Column `{column_name}` already exists")
+        except Exception as ex:
+            app_log.error(f"Column not created: {ex}")
+
+    def drop_column_main(self, column_name):
+        try:
+            self._db_engine.execute(f"ALTER TABLE {self._main_table_name} "
+                                    f"DROP COLUMN {column_name}")
+            app_log.info(f"Column `{column_name}` is dropped")
+        except OperationalError:
+            app_log.info(f"Column `{column_name}` does not exists")
+        except Exception as ex:
+            app_log.error(f"Column not dropped: {ex}")
+
     def open_session(self):
         """
         Opens the local db
@@ -106,5 +127,7 @@ class LocalDb:
 
 if __name__ == "__main__":
     a = LocalDb()
-    a.create_main_table()
+    # a.create_main_table()
+    # a.drop_column_main("test")
+    a.add_column_main("title", "int")
     a.close_engine()

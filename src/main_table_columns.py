@@ -14,6 +14,7 @@ class MainTableColumns:
     c_title = "title"
     c_city = "city"
     c_children = "children"
+    c_test = "test"
 
 
 if __name__ == "__main__":

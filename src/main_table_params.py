@@ -82,6 +82,10 @@ class MainTableParams:
     def children(self) -> Optional[float]:
         return self._params.get(MainTableColumns.c_children, None)
 
+    @property
+    def test(self) -> Optional[float]:
+        return self._params.get(MainTableColumns.c_test, None)
+
 
 if __name__ == "__main__":
     params = {"client_id": 111}
