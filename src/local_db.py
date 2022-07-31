@@ -47,6 +47,8 @@ class LocalDb:
                  db.Column("surname", db.Unicode, nullable=False),
                  db.Column("known_from", db.Enum, nullable=False),
                  db.Column("phone", db.Integer, nullable=True),
+                 db.Column("address", db.Unicode, nullable=True),
+                 db.Column("education", db.Enum, nullable=True),
                  db.Column("email", db.String, nullable=True),
                  db.Column("date_of_birth", db.Date, nullable=True),
                  db.Column("age", db.Integer, nullable=True),
@@ -100,3 +102,4 @@ class LocalDb:
 if __name__ == "__main__":
     a = LocalDb()
     a.create_main_table()
+    a.close_engine()

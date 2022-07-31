@@ -11,3 +11,9 @@ class KnownFrom(Enum):
 class Cities(Enum):
     Kosice = 0
     Presov = 1
+
+
+class Education(Enum):
+    higher = 0
+    middle = 1
+    maturita = 2
