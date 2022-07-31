@@ -14,17 +14,17 @@ class ClientTableParams:
         return self._params.get(ClientTableColumns.c_entry_id, None)
 
     @property
-    def client_type(self) -> int:
+    def client_type(self) -> str:
         return self._params.get(ClientTableColumns.c_client_type, None)
 
     @property
-    def date(self) -> int:
+    def date(self) -> date:
         return self._params.get(ClientTableColumns.c_date, None)
 
     @property
-    def tasks(self) -> int:
+    def tasks(self) -> str:
         return self._params.get(ClientTableColumns.c_tasks, None)
 
     @property
-    def notes(self) -> int:
+    def notes(self) -> str:
         return self._params.get(ClientTableColumns.c_notes, None)

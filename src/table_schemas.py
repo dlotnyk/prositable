@@ -66,7 +66,7 @@ class ClientTable(Base):
     The main Table
     """
     __tablename__ = client_table_suffix
-    entry_id = db.Column(db.Integer, primary_key=True, auto_increment=True)
+    entry_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     date = db.Column(db.Date, nullable=False)
     client_type = db.Column(db.Enum(ClientType), nullable=False)
     tasks = db.Column(db.Unicode)
