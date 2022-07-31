@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from typing import Optional, List, Tuple
 
@@ -35,6 +35,7 @@ class OperateMainTable(DefaultTable):
             title = params.title
             city = params.city
             children = params.children
+            income = params.income
             birthday, c_age = self._get_birth(birth)
             if c_age:
                 age = c_age
@@ -51,6 +52,7 @@ class OperateMainTable(DefaultTable):
                                     work_type=work_type,
                                     family_status=family_status,
                                     children=children,
+                                    income=income,
                                     title=title,
                                     city=city)
             self._open()
@@ -58,9 +60,11 @@ class OperateMainTable(DefaultTable):
                 try:
                     self._dbase.session.add(data)
                     self._dbase.session.commit()
-                    app_log.info(f"Entry inserted to `{self._table_base.__tablename__}`")
+                    app_log.info(f"Entry `{client_id}` inserted to `{self._table_base.__tablename__}`")
+                except OperationalError as aa:
+                    app_log.info(f"{aa}")
                 except IntegrityError:
-                    app_log.info(f"Can not insert into {self._table_base.__tablename__}: id already exists")
+                    app_log.info(f"Can not insert into {self._table_base.__tablename__}: id `{client_id}` already exists")
                 except Exception as ex1:
                     app_log.error(f"Can not insert into {self._table_base.__tablename__}: {ex1}")
                 finally:
@@ -84,9 +88,10 @@ class OperateMainTable(DefaultTable):
 
 
 if __name__ == "__main__":
-    OperateMainTable().insert_entry(client_id=1, name="test_name", surname="test_surname",
+    OperateMainTable().insert_entry(client_id=3, name="test_name", surname="test_surname",
                                     birth="2008-08-11", phone=421944123456, education=Education.higher,
                                     address="some 1", title="ing", email="11@11.com", children=1,
+                                    income=1234.4,
                                     work_type=WorkType.worker, family_status=FamilyStatus.married,
                                     known_from=KnownFrom.university, city=Cities.Kosice)
     OperateMainTable().delete_entry(0)

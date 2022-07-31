@@ -28,6 +28,7 @@ class MainTable(Base):
     children = db.Column(db.Float, nullable=True)
     title = db.Column(db.String, nullable=True)
     city = db.Column(db.Enum(Cities), nullable=True)
+    income = db.Column(db.Float, nullable=True)
 
     def __init__(self, **kwargs):
         try:
@@ -47,6 +48,7 @@ class MainTable(Base):
             self.title = params.title
             self.city = params.city
             self.children = params.children
+            self.income = params.income
         except KeyError:
             pass
 

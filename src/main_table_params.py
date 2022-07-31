@@ -83,8 +83,8 @@ class MainTableParams:
         return self._params.get(MainTableColumns.c_children, None)
 
     @property
-    def test(self) -> Optional[float]:
-        return self._params.get(MainTableColumns.c_test, None)
+    def income(self) -> Optional[float]:
+        return self._params.get(MainTableColumns.c_income, None)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ class MainTableColumns:
     c_title = "title"
     c_city = "city"
     c_children = "children"
+    c_income = "income"
     c_test = "test"
 
 
