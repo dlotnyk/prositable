@@ -17,3 +17,15 @@ class Education(Enum):
     higher = 0
     middle = 1
     maturita = 2
+
+
+class WorkType(Enum):
+    worker = 0
+    business = 1
+
+
+class FamilyStatus(Enum):
+    single = 0
+    married = 1
+    divorced = 2
+    unkhown = 3

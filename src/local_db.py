@@ -52,6 +52,9 @@ class LocalDb:
                  db.Column("email", db.String, nullable=True),
                  db.Column("date_of_birth", db.Date, nullable=True),
                  db.Column("age", db.Integer, nullable=True),
+                 db.Column("work_type", db.Enum, nullable=True),
+                 db.Column("family_status", db.Enum, nullable=True),
+                 db.Column("title", db.String, nullable=True),
                  db.Column("city", db.Enum, nullable=True)
                  )
         try:
