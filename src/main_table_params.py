@@ -5,38 +5,14 @@ from main_table_columns import MainTableColumns
 
 
 class MainTableParams:
-    _mandatory_params: Set = {"client_id", "name", "surname", "known_from"}
-    _optional_params: Set = {"phone", "address", "education", "email", "birth",
-                             "age", "work_type", "family_status", "title", "city"}
 
     def __init__(self, kwargs: Dict) -> None:
         self._params = kwargs
         self._keys = set(self._params.keys())
-        self._check_mandatory()
-
-    @property
-    def mandatory_params(self) -> Set:
-        return self._mandatory_params
-
-    @property
-    def optional_params(self) -> Set:
-        return self._optional_params
-
-    @property
-    def all_params(self) -> Set:
-        return self._mandatory_params.union(self._optional_params)
-
-    def _check_mandatory(self) -> None:
-        if self.mandatory_params.issubset(self._keys):
-            raise KeyError("Not all mandatory parameters are defined")
 
     @property
     def client_id(self) -> int:
-        resp = self._params.get(MainTableColumns.c_client_id, None)
-        if resp:
-            return resp
-        else:
-            raise KeyError(f"{MainTableColumns.c_client_id} not defined")
+        return self._params.get(MainTableColumns.c_client_id, None)
 
     @property
     def name(self) -> str:
@@ -101,3 +77,13 @@ class MainTableParams:
     @property
     def city(self) -> Optional[Cities]:
         return self._params.get(MainTableColumns.c_city, None)
+
+    @property
+    def children(self) -> Optional[float]:
+        return self._params.get(MainTableColumns.c_children, None)
+
+
+if __name__ == "__main__":
+    params = {"client_id": 111}
+    a = MainTableParams(params)
+    print(a.client_id)

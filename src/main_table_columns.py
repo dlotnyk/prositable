@@ -13,4 +13,9 @@ class MainTableColumns:
     c_family_status = "family_status"
     c_title = "title"
     c_city = "city"
+    c_children = "children"
+
+
+if __name__ == "__main__":
+    print(MainTableColumns.c_client_id)
 

@@ -5,6 +5,7 @@ import os
 from typing import Optional
 from table_schemas import Base, main_table_name
 
+from main_table_columns import MainTableColumns
 from dbs.db_defs import local_db_name
 from logger import log_settings
 app_log = log_settings()
@@ -42,20 +43,21 @@ class LocalDb:
     def create_main_table(self):
         metadata = db.MetaData()
         db.Table(self._main_table_name, metadata,
-                 db.Column("client_id", db.Integer, primary_key=True),
-                 db.Column("name", db.Unicode, nullable=False),
-                 db.Column("surname", db.Unicode, nullable=False),
-                 db.Column("known_from", db.Enum, nullable=False),
-                 db.Column("phone", db.Integer, nullable=True),
-                 db.Column("address", db.Unicode, nullable=True),
-                 db.Column("education", db.Enum, nullable=True),
-                 db.Column("email", db.String, nullable=True),
-                 db.Column("date_of_birth", db.Date, nullable=True),
-                 db.Column("age", db.Integer, nullable=True),
-                 db.Column("work_type", db.Enum, nullable=True),
-                 db.Column("family_status", db.Enum, nullable=True),
-                 db.Column("title", db.String, nullable=True),
-                 db.Column("city", db.Enum, nullable=True)
+                 db.Column(MainTableColumns.c_client_id, db.Integer, primary_key=True),
+                 db.Column(MainTableColumns.c_name, db.Unicode, nullable=False),
+                 db.Column(MainTableColumns.c_surname, db.Unicode, nullable=False),
+                 db.Column(MainTableColumns.c_known_from, db.Enum, nullable=False),
+                 db.Column(MainTableColumns.c_phone, db.Integer, nullable=True),
+                 db.Column(MainTableColumns.c_address, db.Unicode, nullable=True),
+                 db.Column(MainTableColumns.c_education, db.Enum, nullable=True),
+                 db.Column(MainTableColumns.c_email, db.String, nullable=True),
+                 db.Column(MainTableColumns.c_birth, db.Date, nullable=True),
+                 db.Column(MainTableColumns.c_age, db.Integer, nullable=True),
+                 db.Column(MainTableColumns.c_work_type, db.Enum, nullable=True),
+                 db.Column(MainTableColumns.c_family_status, db.Enum, nullable=True),
+                 db.Column(MainTableColumns.c_children, db.Float, nullable=True),
+                 db.Column(MainTableColumns.c_title, db.String, nullable=True),
+                 db.Column(MainTableColumns.c_city, db.Enum, nullable=True)
                  )
         try:
             Base.metadata.create_all(self.db_engine)
