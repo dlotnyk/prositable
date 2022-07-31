@@ -96,22 +96,6 @@ class LocalDb:
                 self.is_ok = False
                 app_log.error(f"Engine NOT disposed: {ex}")
 
-    #todo remove to tables classes
-    def insert_entry(self, name: str, surname: str):
-        try:
-            data = MainTable(name=name,
-                             surname=surname)
-            self._session.add(data)
-        except Exception as ex:
-            app_log.error(f"Can not insert into main table: {ex}")
-        else:
-            self._session.commit()
-            app_log.debug(f"Data committed to `{MainTable.__tablename__}`")
-
-    @property
-    def select_all(self):
-        return self._session.query(MainTable).all()
-
 
 if __name__ == "__main__":
     a = LocalDb()
