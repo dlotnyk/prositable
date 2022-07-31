@@ -36,6 +36,7 @@ class OperateMainTable(DefaultTable):
             city = params.city
             children = params.children
             income = params.income
+            income2 = params.income2
             birthday, c_age = self._get_birth(birth)
             if c_age:
                 age = c_age
@@ -53,6 +54,7 @@ class OperateMainTable(DefaultTable):
                                     family_status=family_status,
                                     children=children,
                                     income=income,
+                                    income2=income2,
                                     title=title,
                                     city=city)
             self._open()
@@ -63,8 +65,9 @@ class OperateMainTable(DefaultTable):
                     app_log.info(f"Entry `{client_id}` inserted to `{self._table_base.__tablename__}`")
                 except OperationalError as aa:
                     app_log.info(f"{aa}")
-                except IntegrityError:
-                    app_log.info(f"Can not insert into {self._table_base.__tablename__}: id `{client_id}` already exists")
+                except IntegrityError as ab:
+                    st = str(ab)
+                    app_log.info(f"Can not insert into {self._table_base.__tablename__}: `{st[0:100]}`")
                 except Exception as ex1:
                     app_log.error(f"Can not insert into {self._table_base.__tablename__}: {ex1}")
                 finally:
@@ -88,10 +91,10 @@ class OperateMainTable(DefaultTable):
 
 
 if __name__ == "__main__":
-    OperateMainTable().insert_entry(client_id=3, name="test_name", surname="test_surname",
-                                    birth="2008-08-11", phone=421944123456, education=Education.higher,
-                                    address="some 1", title="ing", email="11@11.com", children=1,
-                                    income=1234.4,
+    OperateMainTable().insert_entry(client_id=2, name="test_name", surname="test_surname",
+                                    birth="2008-08-11", phone=421944123457, education=Education.higher,
+                                    address="some 1", title="ing", email="12@11.com", children=1,
+                                    income=1234.4, income2=11.1,
                                     work_type=WorkType.worker, family_status=FamilyStatus.married,
                                     known_from=KnownFrom.university, city=Cities.Kosice)
     OperateMainTable().delete_entry(0)

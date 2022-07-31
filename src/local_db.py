@@ -55,6 +55,7 @@ class LocalDb:
                  db.Column(MainTableColumns.c_birth, db.Date, nullable=True),
                  db.Column(MainTableColumns.c_age, db.Integer, nullable=True),
                  db.Column(MainTableColumns.c_income, db.Float, nullable=True),
+                 db.Column(MainTableColumns.c_income2, db.Float, nullable=True),
                  db.Column(MainTableColumns.c_work_type, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_family_status, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_children, db.Float, nullable=True),
@@ -128,7 +129,7 @@ class LocalDb:
 
 if __name__ == "__main__":
     a = LocalDb()
-    a.create_main_table()
+    # a.create_main_table()
     # a.drop_column_main("income")
-    # a.add_column_main("income", "FLOAT")
+    a.add_column_main("income2", "FLOAT")
     a.close_engine()

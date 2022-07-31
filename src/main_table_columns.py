@@ -15,7 +15,16 @@ class MainTableColumns:
     c_city = "city"
     c_children = "children"
     c_income = "income"
+    c_income2 = "income2"
     c_test = "test"
+
+
+class ClientTableColumns:
+    c_entry_id = "entry_id"
+    c_date = "date"
+    c_client_type = "client_type"
+    c_tasks = "tasks"
+    c_notes = "notes"
 
 
 if __name__ == "__main__":
