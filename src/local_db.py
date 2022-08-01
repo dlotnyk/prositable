@@ -5,7 +5,8 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import OperationalError
 import os
 from typing import Optional
-from table_schemas import Base, main_table_name, client_table_suffix
+from table_schemas import Base, main_table_name
+from client_table_schema import ClientBase, client_table_suffix, create_client_table
 
 from main_table_columns import MainTableColumns, ClientTableColumns
 from dbs.db_defs import local_db_name
@@ -152,6 +153,7 @@ class ClientTableDb(LocalDb):
     def __init__(self, client_id: int):
         self._id = client_id
         self._table_name = client_table_suffix + str(client_id)
+        create_client_table(self._table_name)
         super().__init__()
 
     def create_table(self):
@@ -164,7 +166,7 @@ class ClientTableDb(LocalDb):
                  db.Column(ClientTableColumns.c_notes, db.Unicode)
                  )
         try:
-            Base.metadata.create_all(self.db_engine)
+            ClientBase.metadata.create_all(self.db_engine)
             app_log.debug(f"Table `{self._table_name}` was created")
         except Exception as ex:
             self.is_ok = False
@@ -178,11 +180,11 @@ class ClientTableDb(LocalDb):
 
 
 if __name__ == "__main__":
-    a = MainTableDb()
-    a.create_table()
+    # a = MainTableDb()
+    # a.create_table()
     # a.drop_column("income3")
     # a.add_column("income4", "FLOAT")
-    a.close_engine()
-    # b = ClientTableDb(1)
-    # b.create_table()
-    # b.close_engine()
+    # a.close_engine()
+    b = ClientTableDb(2)
+    b.create_table()
+    b.close_engine()
