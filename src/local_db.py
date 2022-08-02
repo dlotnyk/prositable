@@ -153,14 +153,14 @@ class ClientTableDb(LocalDb):
     def __init__(self, client_id: int):
         self._id = client_id
         self._table_name = client_table_suffix + str(client_id)
-        create_client_table(self._table_name)
+        a, b = create_client_table(self._table_name)
         super().__init__()
 
     def create_table(self):
         metadata = db.MetaData()
         db.Table(self._table_name, metadata,
-                 db.Column(ClientTableColumns.c_entry_id, db.Integer, db.ForeignKey('client.entry_id'), primary_key=True, autoincrement=True,
-                           ),
+                 db.Column(ClientTableColumns.c_entry_id, db.Integer, db.ForeignKey('client.entry_id'),
+                           primary_key=True, autoincrement=True),
                  db.Column(ClientTableColumns.c_date, db.Date, nullable=False),
                  db.Column(ClientTableColumns.c_client_type, db.Enum),
                  db.Column(ClientTableColumns.c_tasks, db.Unicode),
@@ -186,6 +186,6 @@ if __name__ == "__main__":
     # a.drop_column("income3")
     # a.add_column("income4", "FLOAT")
     # a.close_engine()
-    b = ClientTableDb(2)
+    b = ClientTableDb(1)
     b.create_table()
     b.close_engine()
