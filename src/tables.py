@@ -5,6 +5,8 @@ from typing import Optional, List, Tuple
 from default_table import DefaultTable
 from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
 from table_schemas import MainTable, main_table_name
+from client_table_schema import client_table_suffix
+from client_table_schema import create_client_table
 from main_table_params import MainTableParams
 from logger import log_settings
 app_log = log_settings()

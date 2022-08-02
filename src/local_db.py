@@ -159,7 +159,8 @@ class ClientTableDb(LocalDb):
     def create_table(self):
         metadata = db.MetaData()
         db.Table(self._table_name, metadata,
-                 db.Column(ClientTableColumns.c_entry_id, db.Integer, primary_key=True, autoincrement=True),
+                 db.Column(ClientTableColumns.c_entry_id, db.Integer, db.ForeignKey('client.entry_id'), primary_key=True, autoincrement=True,
+                           ),
                  db.Column(ClientTableColumns.c_date, db.Date, nullable=False),
                  db.Column(ClientTableColumns.c_client_type, db.Enum),
                  db.Column(ClientTableColumns.c_tasks, db.Unicode),
