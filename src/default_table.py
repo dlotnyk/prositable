@@ -1,7 +1,6 @@
 from typing import Optional, List, Tuple
 from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError, OperationalError
-from sqlalchemy.orm.exc import UnmappedInstanceError
 
 from table_schemas import Base
 from local_db import LocalDb
@@ -10,6 +9,7 @@ app_log = log_settings()
 
 
 class DefaultTable:
+    _separator = "_"
     _table_name = ""
     _table_base: Optional[Base] = None
 
@@ -50,12 +50,18 @@ class DefaultTable:
             app_log.error(f"Can not insert into {self._table_base.__tablename__}: {ex}")
 
     def select_all(self) -> Optional[List]:
-        self._open()
-        if self._dbase and self._dbase.session and self.table_base:
-            resp = self._dbase.session.query(self.table_base).all()
+        try:
+            self._open()
+            if self._dbase and self._dbase.session and self.table_base:
+                resp = self._dbase.session.query(self.table_base).all()
+                return resp
+            return list()
+        except OperationalError as oe:
+            oo = str(oe)
+            app_log.error(f"{oo}")
+            return list()
+        finally:
             self._close()
-            return resp
-        return None
 
     @staticmethod
     def _calculate_age(born):

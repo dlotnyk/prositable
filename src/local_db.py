@@ -6,7 +6,7 @@ from sqlalchemy.exc import OperationalError
 import os
 from typing import Optional
 from table_schemas import Base, main_table_name
-from client_table_schema import ClientBase, client_table_suffix, create_client_table
+from client_table_schema import client_table_suffix, create_client_table
 
 from main_table_columns import MainTableColumns, ClientTableColumns
 from dbs.db_defs import local_db_name
@@ -18,6 +18,7 @@ class LocalDb:
     """
     local db based of sqlite3
     """
+    _separator = "_"
     _db_name = local_db_name
     _table_name = main_table_name
 
@@ -150,10 +151,10 @@ class MainTableDb(LocalDb):
 
 class ClientTableDb(LocalDb):
 
-    def __init__(self, client_id: int):
+    def __init__(self, client_id: int, name: str, surname: str):
         self._id = client_id
-        self._table_name = client_table_suffix + str(client_id)
-        a, b = create_client_table(self._table_name)
+        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(client_id)
+        _, self._table_base = create_client_table(self._table_name)
         super().__init__()
 
     def create_table(self):
@@ -167,7 +168,7 @@ class ClientTableDb(LocalDb):
                  db.Column(ClientTableColumns.c_notes, db.Unicode)
                  )
         try:
-            ClientBase.metadata.create_all(self.db_engine)
+            self._table_base.metadata.create_all(self.db_engine)
             app_log.debug(f"Table `{self._table_name}` was created")
         except Exception as ex:
             self.is_ok = False
@@ -186,6 +187,6 @@ if __name__ == "__main__":
     # a.drop_column("income3")
     # a.add_column("income4", "FLOAT")
     # a.close_engine()
-    b = ClientTableDb(1)
+    b = ClientTableDb(client_id=0, name="name", surname="surname")
     b.create_table()
     b.close_engine()

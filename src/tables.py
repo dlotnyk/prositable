@@ -6,7 +6,7 @@ from default_table import DefaultTable
 from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus, ClientType
 from table_schemas import MainTable, main_table_name
 from client_table_prototype import ClientTable
-from client_table_schema import client_table_suffix
+from client_table_schema import client_table_suffix, create_client_table
 from main_table_params import MainTableParams
 from client_table_params import ClientTableParams
 from logger import log_settings
@@ -77,11 +77,11 @@ class OperateMainTable(DefaultTable):
 
 
 class OperateClientTable(DefaultTable):
-    _table_base = ClientTable
 
-    def __init__(self, cid: int) -> None:
+    def __init__(self, cid: int, name: str, surname: str) -> None:
         super().__init__(cid=cid)
-        self._table_name = client_table_suffix + str(cid)
+        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
+        self._table_base, _ = create_client_table(self._table_name)
 
     def insert_entry(self, **kwargs) -> None:
         params = ClientTableParams(kwargs)
@@ -113,9 +113,13 @@ if __name__ == "__main__":
     #     print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "
     #           f"{item.phone} - {item.city}")
     #
-    OperateClientTable(2).insert_entry(client_type=ClientType.mz, date="2022-08-02",
+    OperateClientTable(cid=0,
+                       name="name",
+                       surname="surname").insert_entry(client_type=ClientType.mz, date="2022-08-02",
                                       tasks="to do", notes="notes")
-    resp = OperateClientTable(2).select_all()
+    resp = OperateClientTable(cid=0,
+                              name="name",
+                              surname="surname").select_all()
     for item in resp:
         print(f"{item.entry_id} - {item.client_type} - {item.date} - "
               f"{item.tasks} - {item.notes}")
