@@ -37,16 +37,16 @@ class FamilyStatus(Enum):
 
 
 class ClientType(Enum):
-    mz = 0
-    k1 = 1
-    k2 = 3
-    k3 = 4
-    k4 = 5
+    MZ = 0
+    DPK = 1
+    DEK = 2
+    DDNK = 3
+    DNK = 4
 
 
 class CoopType(Enum):
-    mz = 0
-    k1 = 1
-    k2 = 3
-    k3 = 4
-    k4 = 5
+    MZ = 0
+    DPS = 1
+    DES = 2
+    DDNS = 3
+    DNS = 4

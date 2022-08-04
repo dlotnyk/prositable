@@ -1,7 +1,7 @@
 from sqlalchemy.orm.exc import UnmappedInstanceError
 
 from default_table import DefaultTable
-from basic_defs import ClientType
+from basic_defs import ClientType, WorkType, FamilyStatus, Education, KnownFrom, Cities
 from table_schemas import MainTable, main_table_name
 from client_table_schema import client_table_suffix, create_client_table
 from main_table_params import MainTableParams
@@ -23,6 +23,7 @@ class OperateMainTable(DefaultTable):
         name = params.name
         surname = params.surname
         known_from = params.known_from
+        first_contact = params.first_contact
         phone = params.phone
         email = params.email
         address = params.address
@@ -36,6 +37,7 @@ class OperateMainTable(DefaultTable):
         children = params.children
         income = params.income
         income2 = params.income2
+        contact, _ = self._get_birth(first_contact)
         birthday, c_age = self._get_birth(birth)
         if c_age:
             age = c_age
@@ -43,6 +45,7 @@ class OperateMainTable(DefaultTable):
                                 name=name,
                                 surname=surname,
                                 known_from=known_from,
+                                first_contact=contact,
                                 phone=phone,
                                 address=address,
                                 education=education,
@@ -98,25 +101,25 @@ class OperateClientTable(DefaultTable):
 
 
 if __name__ == "__main__":
-    # OperateMainTable().insert_entry(client_id=2, name="test_name", surname="test_surname",
-    #                                 birth="2008-08-11", phone=421944123457, education=Education.higher,
-    #                                 address="some 1", title="ing", email="21@11.com", children=1,
-    #                                 income=1234.4, income2=11.1,
-    #                                 work_type=WorkType.worker, family_status=FamilyStatus.married,
-    #                                 known_from=KnownFrom.university, city=Cities.Kosice)
-    # OperateMainTable().delete_entry(0)
-    # resp = OperateMainTable().select_all()
-    # for item in resp:
-    #     print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "
-    #           f"{item.phone} - {item.city}")
-    #
+    OperateMainTable().insert_entry(client_id=2, name="Name", surname="Surname",
+                                    birth="2008-08-11", phone=421944123457, education=Education.higher,
+                                    address="some 1", title="ing", email="21@11.com", children=1,
+                                    income=1234.4, income2=11.1, first_contact="2021-01-19",
+                                    work_type=WorkType.worker, family_status=FamilyStatus.married,
+                                    known_from=KnownFrom.university, city=Cities.Kosice)
+    OperateMainTable().delete_entry(0)
+    resp = OperateMainTable().select_all()
+    for item in resp:
+        print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "
+              f"{item.phone} - {item.city}")
+
     OperateClientTable(cid=2,
-                       name="test_name",
-                       surname="test_surname").insert_entry(client_type=ClientType.mz, date="2022-08-02",
+                       name="Name",
+                       surname="Surname").insert_entry(client_type=ClientType.MZ, date="2022-08-02",
                                       tasks="to do", notes="notes")
-    resp = OperateClientTable(cid=0,
-                              name="name",
-                              surname="surname").select_all()
+    resp = OperateClientTable(cid=2,
+                              name="Name",
+                              surname="Surname").select_all()
     for item in resp:
         print(f"{item.entry_id} - {item.client_type} - {item.date} - "
               f"{item.tasks} - {item.notes}")

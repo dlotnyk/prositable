@@ -39,6 +39,10 @@ class MainTableParams:
             raise KeyError(f"{MainTableColumns.c_known_from} not defined")
 
     @property
+    def first_contact(self) -> Optional[date]:
+        return self._params.get(MainTableColumns.c_first_contact, None)
+
+    @property
     def phone(self) -> Optional[int]:
         return self._params.get(MainTableColumns.c_phone, None)
 

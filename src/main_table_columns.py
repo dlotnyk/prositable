@@ -3,6 +3,7 @@ class MainTableColumns:
     c_name = "name"
     c_surname = "surname"
     c_known_from = "known_from"
+    c_first_contact = "first_contact"
     c_phone = "phone"
     c_address = "address"
     c_education = "education"
