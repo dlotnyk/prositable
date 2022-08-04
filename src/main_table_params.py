@@ -39,6 +39,10 @@ class MainTableParams:
             raise KeyError(f"{MainTableColumns.c_known_from} not defined")
 
     @property
+    def first_contact(self) -> Optional[date]:
+        return self._params.get(MainTableColumns.c_first_contact, None)
+
+    @property
     def phone(self) -> Optional[int]:
         return self._params.get(MainTableColumns.c_phone, None)
 
@@ -83,8 +87,12 @@ class MainTableParams:
         return self._params.get(MainTableColumns.c_children, None)
 
     @property
-    def test(self) -> Optional[float]:
-        return self._params.get(MainTableColumns.c_test, None)
+    def income(self) -> Optional[float]:
+        return self._params.get(MainTableColumns.c_income, None)
+
+    @property
+    def income2(self) -> Optional[float]:
+        return self._params.get(MainTableColumns.c_income2, None)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ from main_table_params import MainTableParams
 Base = declarative_base()
 
 main_table_name = "main_table"
+coop_table_suffix = "coop_history_"
 
 
 class MainTable(Base):
@@ -17,6 +18,7 @@ class MainTable(Base):
     name = db.Column(db.Unicode, nullable=False)
     surname = db.Column(db.Unicode, nullable=False)
     known_from = db.Column(db.Enum(KnownFrom), nullable=False)
+    first_contact = db.Column(db.Date, nullable=True)
     phone = db.Column(db.Integer, nullable=True, unique=True)
     address = db.Column(db.Unicode, nullable=True)
     education = db.Column(db.Enum(Education), nullable=True)
@@ -28,6 +30,8 @@ class MainTable(Base):
     children = db.Column(db.Float, nullable=True)
     title = db.Column(db.String, nullable=True)
     city = db.Column(db.Enum(Cities), nullable=True)
+    income = db.Column(db.Float, nullable=True)
+    income2 = db.Column(db.Float, nullable=True)
 
     def __init__(self, **kwargs):
         try:
@@ -36,6 +40,7 @@ class MainTable(Base):
             self.name = params.name
             self.surname = params.surname
             self.known_from = params.known_from
+            self.first_contact = params.first_contact
             self.phone = params.phone
             self.address = params.address
             self.education = params.education
@@ -47,6 +52,8 @@ class MainTable(Base):
             self.title = params.title
             self.city = params.city
             self.children = params.children
+            self.income = params.income
+            self.income2 = params.income2
         except KeyError:
             pass
 

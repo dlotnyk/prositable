@@ -1,15 +1,20 @@
 from typing import Optional, List, Tuple
 from datetime import datetime, date
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from table_schemas import Base
 from local_db import LocalDb
+from logger import log_settings
+app_log = log_settings()
 
 
 class DefaultTable:
+    _separator = "_"
     _table_name = ""
     _table_base: Optional[Base] = None
 
-    def __init__(self):
+    def __init__(self, cid=None):
+        self._cid = cid
         self._dbase: Optional[LocalDb] = None
 
     @property
@@ -24,13 +29,39 @@ class DefaultTable:
         self._dbase.close_session()
         self._dbase.close_engine()
 
+    def _insert_data(self, data):
+        try:
+            self._open()
+            if self._dbase and self._dbase.session:
+                try:
+                    self._dbase.session.add(data)
+                    self._dbase.session.commit()
+                    app_log.info(f"Entry inserted to `{self._table_base.__tablename__}`")
+                except OperationalError as aa:
+                    app_log.info(f"{aa}")
+                except IntegrityError as ab:
+                    st = str(ab)
+                    app_log.info(f"Can not insert into {self._table_base.__tablename__}: `{st[0:100]}`")
+                except Exception as ex1:
+                    app_log.error(f"Can not insert into {self._table_base.__tablename__}: {ex1}")
+                finally:
+                    self._close()
+        except Exception as ex:
+            app_log.error(f"Can not insert into {self._table_base.__tablename__}: {ex}")
+
     def select_all(self) -> Optional[List]:
-        self._open()
-        if self._dbase and self._dbase.session and self.table_base:
-            resp = self._dbase.session.query(self.table_base).all()
+        try:
+            self._open()
+            if self._dbase and self._dbase.session and self.table_base:
+                resp = self._dbase.session.query(self.table_base).all()
+                return resp
+            return list()
+        except OperationalError as oe:
+            oo = str(oe)
+            app_log.error(f"{oo}")
+            return list()
+        finally:
             self._close()
-            return resp
-        return None
 
     @staticmethod
     def _calculate_age(born):
