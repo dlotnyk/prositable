@@ -6,7 +6,6 @@ from main_table_params import MainTableParams
 Base = declarative_base()
 
 main_table_name = "main_table"
-client_table_suffix = "client_history_"
 coop_table_suffix = "coop_history_"
 
 

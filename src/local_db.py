@@ -81,16 +81,29 @@ class LocalDb:
                 self.is_ok = False
                 app_log.error(f"Engine NOT disposed: {ex}")
 
+    def add_column(self, column_name, column_type):
+        try:
+            self._db_engine.execute(f"ALTER TABLE {self._table_name} "
+                                    f"ADD COLUMN {column_name} {column_type}")
+            app_log.info(f"Column `{column_name}` created")
+        except OperationalError:
+            app_log.info(f"Column `{column_name}` already exists")
+        except Exception as ex:
+            app_log.error(f"Column not created: {ex}")
+
+    def drop_column(self, column_name):
+        #todo for some reason drop is not working
+        try:
+            self._db_engine.execute(f"ALTER TABLE {self._table_name} "
+                                    f"DROP COLUMN {column_name}")
+            app_log.info(f"Column `{column_name}` is dropped")
+        except OperationalError as ee:
+            app_log.info(f"{ee}")
+        except Exception as ex:
+            app_log.error(f"Column not dropped: {ex}")
+
     @abstractmethod
     def create_table(self):
-        pass
-
-    @abstractmethod
-    def add_column(self, column_name: str, column_type: str) -> None:
-        pass
-
-    @abstractmethod
-    def delete_column(self, column_name: str) -> None:
         pass
 
 
@@ -128,26 +141,6 @@ class MainTableDb(LocalDb):
             self.is_ok = False
             app_log.error(f"Can not create table: `{ex}`")
 
-    def add_column(self, column_name, column_type):
-        try:
-            self._db_engine.execute(f"ALTER TABLE {self._table_name} "
-                                    f"ADD COLUMN {column_name} {column_type}")
-            app_log.info(f"Column `{column_name}` created")
-        except OperationalError:
-            app_log.info(f"Column `{column_name}` already exists")
-        except Exception as ex:
-            app_log.error(f"Column not created: {ex}")
-
-    def drop_column(self, column_name):
-        try:
-            self._db_engine.execute(f"ALTER TABLE {self._table_name} "
-                                    f"DROP COLUMN {column_name}")
-            app_log.info(f"Column `{column_name}` is dropped")
-        except OperationalError as ee:
-            app_log.info(f"{ee}")
-        except Exception as ex:
-            app_log.error(f"Column not dropped: {ex}")
-
 
 class ClientTableDb(LocalDb):
 
@@ -174,12 +167,6 @@ class ClientTableDb(LocalDb):
             self.is_ok = False
             app_log.error(f"Can not create table: `{ex}`")
 
-    def add_column(self, column_name: str, column_type: str) -> None:
-        pass
-
-    def delete_column(self, column_name: str) -> None:
-        pass
-
 
 if __name__ == "__main__":
     # a = MainTableDb()
@@ -188,5 +175,7 @@ if __name__ == "__main__":
     # a.add_column("income4", "FLOAT")
     # a.close_engine()
     b = ClientTableDb(client_id=0, name="name", surname="surname")
-    b.create_table()
+    # b.create_table()
+    # b.add_column("test", "FLOAT")
+    # b.drop_column("test")
     b.close_engine()

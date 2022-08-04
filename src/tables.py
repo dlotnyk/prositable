@@ -1,11 +1,8 @@
-from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from typing import Optional, List, Tuple
 
 from default_table import DefaultTable
-from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus, ClientType
+from basic_defs import ClientType
 from table_schemas import MainTable, main_table_name
-from client_table_prototype import ClientTable
 from client_table_schema import client_table_suffix, create_client_table
 from main_table_params import MainTableParams
 from client_table_params import ClientTableParams
@@ -113,9 +110,9 @@ if __name__ == "__main__":
     #     print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "
     #           f"{item.phone} - {item.city}")
     #
-    OperateClientTable(cid=0,
-                       name="name",
-                       surname="surname").insert_entry(client_type=ClientType.mz, date="2022-08-02",
+    OperateClientTable(cid=2,
+                       name="test_name",
+                       surname="test_surname").insert_entry(client_type=ClientType.mz, date="2022-08-02",
                                       tasks="to do", notes="notes")
     resp = OperateClientTable(cid=0,
                               name="name",
