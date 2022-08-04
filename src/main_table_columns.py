@@ -28,6 +28,14 @@ class ClientTableColumns:
     c_notes = "notes"
 
 
+class CoopTableColumns:
+    c_entry_id = "entry_id"
+    c_date = "date"
+    c_client_type = "coop_type"
+    c_tasks = "tasks"
+    c_notes = "notes"
+
+
 if __name__ == "__main__":
     print(MainTableColumns.c_client_id)
 
