@@ -31,7 +31,7 @@ class ClientTableColumns:
 class CoopTableColumns:
     c_entry_id = "entry_id"
     c_date = "date"
-    c_client_type = "coop_type"
+    c_coop_type = "coop_type"
     c_tasks = "tasks"
     c_notes = "notes"
 

@@ -1,6 +1,6 @@
 from typing import Optional, List
 from tables import OperateMainTable
-from local_db import ClientTableDb
+from local_db import ClientTableDb, LocalDb, CoopTableDb
 from table_schemas import MainTable
 from logger import log_settings
 app_log = log_settings()
@@ -13,11 +13,11 @@ class EntryDetails:
         self.surname = surname
 
 
-class GenerateClientTables:
+class GenerateTables:
 
-    def __init__(self):
+    def __init__(self, table_db: LocalDb):
         self._main_table_inst = OperateMainTable()
-        self._client_table_db: Optional[ClientTableDb] = None
+        self._table_db = table_db
         self._details_list: List[EntryDetails] = list()
         self._get_main_table_entries()
 
@@ -37,7 +37,7 @@ class GenerateClientTables:
         if self._details_list:
             for entry in self._details_list:
                 try:
-                    cl_table = ClientTableDb(client_id=entry.cid,
+                    cl_table = self._table_db(cid=entry.cid,
                                              name=entry.name,
                                              surname=entry.surname)
                     cl_table.create_table()
@@ -48,7 +48,7 @@ class GenerateClientTables:
 
 
 if __name__ == "__main__":
-    a = GenerateClientTables()
+    a = GenerateTables(CoopTableDb)
     for item in a.details_list:
         print(f"{item.cid} - {item.name} - {item.surname}")
     a.create_client_tables()

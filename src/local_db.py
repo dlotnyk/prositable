@@ -7,8 +7,9 @@ import os
 from typing import Optional
 from table_schemas import Base, main_table_name
 from client_table_schema import client_table_suffix, create_client_table
+from coop_table_schema import coop_table_suffix, create_coop_table
 
-from main_table_columns import MainTableColumns, ClientTableColumns
+from main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
 from dbs.db_defs import local_db_name
 from logger import log_settings
 app_log = log_settings()
@@ -21,8 +22,9 @@ class LocalDb:
     _separator = "_"
     _db_name = local_db_name
     _table_name = main_table_name
+    _table_base = None
 
-    def __init__(self) -> None:
+    def __init__(self, cid=None, name=None, surname=None) -> None:
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
@@ -81,6 +83,15 @@ class LocalDb:
                 self.is_ok = False
                 app_log.error(f"Engine NOT disposed: {ex}")
 
+    def _create_process(self) -> None:
+        if self._table_base is not None:
+            try:
+                self._table_base.metadata.create_all(self.db_engine)
+                app_log.debug(f"Table `{self._table_name}` was created")
+            except Exception as ex:
+                self.is_ok = False
+                app_log.error(f"Can not create table: `{ex}`")
+
     def add_column(self, column_name, column_type):
         try:
             self._db_engine.execute(f"ALTER TABLE {self._table_name} "
@@ -92,7 +103,6 @@ class LocalDb:
             app_log.error(f"Column not created: {ex}")
 
     def drop_column(self, column_name):
-        #todo for some reason drop is not working
         try:
             self._db_engine.execute(f"ALTER TABLE {self._table_name} "
                                     f"DROP COLUMN {column_name}")
@@ -111,6 +121,7 @@ class MainTableDb(LocalDb):
 
     def __init__(self):
         self._table_name = main_table_name
+        self._table_base = Base
         super().__init__()
 
     def create_table(self):
@@ -134,19 +145,14 @@ class MainTableDb(LocalDb):
                  db.Column(MainTableColumns.c_title, db.String, nullable=True),
                  db.Column(MainTableColumns.c_city, db.Enum, nullable=True)
                  )
-        try:
-            Base.metadata.create_all(self.db_engine)
-            app_log.debug(f"Table `{self._table_name}` was created")
-        except Exception as ex:
-            self.is_ok = False
-            app_log.error(f"Can not create table: `{ex}`")
+        self._create_process()
 
 
 class ClientTableDb(LocalDb):
 
-    def __init__(self, client_id: int, name: str, surname: str):
-        self._id = client_id
-        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(client_id)
+    def __init__(self, cid: int, name: str, surname: str):
+        self._id = cid
+        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
         _, self._table_base = create_client_table(self._table_name)
         super().__init__()
 
@@ -160,12 +166,28 @@ class ClientTableDb(LocalDb):
                  db.Column(ClientTableColumns.c_tasks, db.Unicode),
                  db.Column(ClientTableColumns.c_notes, db.Unicode)
                  )
-        try:
-            self._table_base.metadata.create_all(self.db_engine)
-            app_log.debug(f"Table `{self._table_name}` was created")
-        except Exception as ex:
-            self.is_ok = False
-            app_log.error(f"Can not create table: `{ex}`")
+        self._create_process()
+
+
+class CoopTableDb(LocalDb):
+
+    def __init__(self, cid: int, name: str, surname: str):
+        self._id = cid
+        self._table_name = coop_table_suffix + name + self._separator + surname + self._separator + str(cid)
+        _, self._table_base = create_coop_table(self._table_name)
+        super().__init__()
+
+    def create_table(self):
+        metadata = db.MetaData()
+        db.Table(self._table_name, metadata,
+                 db.Column(CoopTableColumns.c_entry_id, db.Integer, db.ForeignKey('client.entry_id'),
+                           primary_key=True, autoincrement=True),
+                 db.Column(CoopTableColumns.c_date, db.Date, nullable=False),
+                 db.Column(CoopTableColumns.c_coop_type, db.Enum),
+                 db.Column(CoopTableColumns.c_tasks, db.Unicode),
+                 db.Column(CoopTableColumns.c_notes, db.Unicode)
+                 )
+        self._create_process()
 
 
 if __name__ == "__main__":
@@ -174,7 +196,7 @@ if __name__ == "__main__":
     # a.drop_column("income3")
     # a.add_column("income4", "FLOAT")
     a.close_engine()
-    b = ClientTableDb(client_id=0, name="name", surname="surname")
+    # b = ClientTableDb(client_id=0, name="name", surname="surname")
     # b.create_table()
     # b.add_column("test", "FLOAT")
     # b.drop_column("test")
