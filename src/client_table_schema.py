@@ -1,3 +1,4 @@
+from typing import Tuple, Callable
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from client_table_params import ClientTableParams
@@ -5,7 +6,7 @@ from basic_defs import ClientType
 client_table_suffix = "client_history_"
 
 
-def create_client_table(table_name: str):
+def create_client_table(table_name: str) -> Tuple[Callable]:
     ClientBaseDef = declarative_base()
 
     class ClientTableDef(ClientBaseDef):
