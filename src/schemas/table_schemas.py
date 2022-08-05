@@ -1,8 +1,8 @@
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 
-from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
-from main_table_params import MainTableParams
+from defs.basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
+from defs.main_table_params import MainTableParams
 Base = declarative_base()
 
 main_table_name = "main_table"

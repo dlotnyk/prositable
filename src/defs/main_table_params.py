@@ -1,7 +1,7 @@
-from typing import Set, Dict, Optional
+from typing import Dict, Optional
 from datetime import date
-from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
-from main_table_columns import MainTableColumns
+from defs.basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
+from defs.main_table_columns import MainTableColumns
 
 
 class MainTableParams:

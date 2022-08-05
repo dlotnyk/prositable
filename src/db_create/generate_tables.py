@@ -1,7 +1,7 @@
-from typing import Optional, List
+from typing import List
 from operate_main_table import OperateMainTable
-from local_db import ClientTableDb, LocalDb, CoopTableDb
-from table_schemas import MainTable
+from db_create.local_db import ClientTableDb, LocalDb, CoopTableDb
+from schemas.table_schemas import MainTable
 from logger import log_settings
 app_log = log_settings()
 

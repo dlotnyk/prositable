@@ -2,8 +2,8 @@ from typing import Optional, List, Tuple
 from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError, OperationalError
 
-from table_schemas import Base
-from local_db import LocalDb
+from schemas.table_schemas import Base
+from db_create.local_db import LocalDb
 from logger import log_settings
 app_log = log_settings()
 

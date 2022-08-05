@@ -1,7 +1,7 @@
-from default_table import DefaultTable
-from basic_defs import ClientType
-from client_table_schema import client_table_suffix, create_client_table
-from client_table_params import ClientTableParams
+from db_create.default_table import DefaultTable
+from defs.basic_defs import ClientType
+from schemas.client_table_schema import client_table_suffix, create_client_table
+from defs.client_table_params import ClientTableParams
 from logger import log_settings
 app_log = log_settings()
 

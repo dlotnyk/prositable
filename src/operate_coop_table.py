@@ -1,7 +1,7 @@
-from default_table import DefaultTable
-from basic_defs import CoopType
-from coop_table_schema import coop_table_suffix, create_coop_table
-from coop_table_params import CoopTableParams
+from db_create.default_table import DefaultTable
+from defs.basic_defs import CoopType
+from schemas.coop_table_schema import coop_table_suffix, create_coop_table
+from defs.coop_table_params import CoopTableParams
 from logger import log_settings
 app_log = log_settings()
 
@@ -16,14 +16,14 @@ class OperateCoopTable(DefaultTable):
     def insert_entry(self, **kwargs) -> None:
         params = CoopTableParams(kwargs)
         entry_id = params.entry_id
-        client_type = params.coop_type
+        coop_type = params.coop_type
         cdate = params.date
         tasks = params.tasks
         notes = params.notes
         date, _ = self._get_birth(cdate)
 
         data = self._table_base(entry_id=entry_id,
-                                client_type=client_type,
+                                coop_type=coop_type,
                                 date=date,
                                 tasks=tasks,
                                 notes=notes)
@@ -33,7 +33,7 @@ class OperateCoopTable(DefaultTable):
 if __name__ == "__main__":
     OperateCoopTable(cid=2,
                      name="Name",
-                     surname="Surname").insert_entry(client_type=CoopType.MZ,
+                     surname="Surname").insert_entry(coop_type=CoopType.MZ,
                                                      date="2022-08-02",
                                                      tasks="to do",
                                                      notes="notes")

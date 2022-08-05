@@ -1,9 +1,9 @@
 from sqlalchemy.orm.exc import UnmappedInstanceError
 
-from default_table import DefaultTable
-from basic_defs import WorkType, FamilyStatus, Education, KnownFrom, Cities
-from table_schemas import MainTable, main_table_name
-from main_table_params import MainTableParams
+from db_create.default_table import DefaultTable
+from defs.basic_defs import WorkType, FamilyStatus, Education, KnownFrom, Cities
+from schemas.table_schemas import MainTable, main_table_name
+from defs.main_table_params import MainTableParams
 from logger import log_settings
 app_log = log_settings()
 

@@ -5,11 +5,11 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import OperationalError
 import os
 from typing import Optional
-from table_schemas import Base, main_table_name
-from client_table_schema import client_table_suffix, create_client_table
-from coop_table_schema import coop_table_suffix, create_coop_table
+from schemas.table_schemas import Base, main_table_name
+from schemas.client_table_schema import client_table_suffix, create_client_table
+from schemas.coop_table_schema import coop_table_suffix, create_coop_table
 
-from main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
+from defs.main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
 from dbs.db_defs import local_db_name
 from logger import log_settings
 app_log = log_settings()
