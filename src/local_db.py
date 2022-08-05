@@ -193,11 +193,4 @@ class CoopTableDb(LocalDb):
 if __name__ == "__main__":
     a = MainTableDb()
     a.create_table()
-    # a.drop_column("income3")
-    # a.add_column("income4", "FLOAT")
     a.close_engine()
-    # b = ClientTableDb(client_id=0, name="name", surname="surname")
-    # b.create_table()
-    # b.add_column("test", "FLOAT")
-    # b.drop_column("test")
-    # b.close_engine()

@@ -6,7 +6,7 @@ from basic_defs import ClientType
 client_table_suffix = "client_history_"
 
 
-def create_client_table(table_name: str) -> Tuple[Callable]:
+def create_client_table(table_name: str) -> Tuple:
     ClientBaseDef = declarative_base()
 
     class ClientTableDef(ClientBaseDef):

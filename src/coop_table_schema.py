@@ -15,7 +15,7 @@ def create_coop_table(table_name: str):
         __tablename__ = table_name
         entry_id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
         date = db.Column(db.Date, nullable=False)
-        coop_type = db.Column(db.Enum(CoopType), nullable=False)
+        coop_type = db.Column(db.Enum(CoopType), nullable=True)
         tasks = db.Column(db.Unicode)
         notes = db.Column(db.Unicode)
 
