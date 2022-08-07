@@ -1,6 +1,6 @@
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from typing import List
-from sqlalchemy.exc import IntegrityError, OperationalError
+from typing import List, Tuple
+from sqlalchemy.exc import OperationalError
 
 from db_create.default_table import DefaultTable
 from defs.main_table_columns import MainTableColumns
@@ -34,6 +34,12 @@ class OperateMainTable(DefaultTable):
 
     def _is_valid_id(self, cid: int) -> bool:
         return cid in self._select_id()
+
+    def _is_rename(self, args: Tuple) -> bool:
+        try:
+            return args[2] is True
+        except IndexError:
+            return False
 
     def execute_update(func):
         def inner(self, *args, **kwargs):
@@ -189,26 +195,42 @@ class OperateMainTable(DefaultTable):
         self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
             update({MainTableColumns.c_known_from: known}, synchronize_session="fetch")
 
+    @execute_update
+    def update_surname(self, client_id: int, surname: str, rename: bool) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_surname: surname}, synchronize_session="fetch")
+
+    @execute_update
+    def update_name(self, client_id: int, name: str) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_name: name}, synchronize_session="fetch")
+
+    @execute_update
+    def update_id(self, client_id: int, cid: int) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_client_id: cid}, synchronize_session="fetch")
+
 
 if __name__ == "__main__":
-    # OperateMainTable().insert_entry(client_id=1002,
-    #                                 name="O",
-    #                                 surname="",
-    #                                 birth="",
-    #                                 phone="",
-    #                                 education=Education.higher,
-    #                                 address="Juzna",
-    #                                 title="PhD",
-    #                                 email="",
-    #                                 children=0,
-    #                                 income=1000,
-    #                                 income2=0,
-    #                                 first_contact="2022-07-29",
-    #                                 work_type=WorkType.worker,
-    #                                 family_status=FamilyStatus.single,
-    #                                 known_from=KnownFrom.university,
-    #                                 city=Cities.Kosice)
+    OperateMainTable().insert_entry(client_id=2,
+                                    name="mm",
+                                    surname="sa",
+                                    birth="",
+                                    phone="",
+                                    education=Education.higher,
+                                    address="Juzna",
+                                    title="PhD",
+                                    email="",
+                                    children=0,
+                                    income=1000,
+                                    income2=0,
+                                    first_contact="2022-07-29",
+                                    work_type=WorkType.worker,
+                                    family_status=FamilyStatus.single,
+                                    known_from=KnownFrom.university,
+                                    city=Cities.Kosice)
     OperateMainTable().update_title(2, "PhD")
+    OperateMainTable().update_surname(2, "Ann", True)
     resp = OperateMainTable().select_all()
     for item in resp:
         print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "

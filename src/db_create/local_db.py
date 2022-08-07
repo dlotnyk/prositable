@@ -112,6 +112,16 @@ class LocalDb:
         except Exception as ex:
             app_log.error(f"Column not dropped: {ex}")
 
+    def rename_table(self, old_name: str, new_name: str):
+        try:
+            self._db_engine.execute(f"ALTER TABLE {old_name} "
+                                    f"RENAME TO {new_name}")
+            app_log.info(f"Table renamed to `{new_name}`")
+        except OperationalError as ee:
+            app_log.info(f"{ee}")
+        except Exception as ex:
+            app_log.error(f"Table not renamed to: {ex}")
+
     @abstractmethod
     def create_table(self):
         pass
@@ -191,6 +201,7 @@ class CoopTableDb(LocalDb):
 
 
 if __name__ == "__main__":
-    a = MainTableDb()
-    a.create_table()
-    a.close_engine()
+    b = MainTableDb()
+    b.create_table()
+    b.close_engine()
+
