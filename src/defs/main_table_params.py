@@ -43,7 +43,7 @@ class MainTableParams:
         return self._params.get(MainTableColumns.c_first_contact, None)
 
     @property
-    def phone(self) -> Optional[int]:
+    def phone(self) -> Optional[str]:
         return self._params.get(MainTableColumns.c_phone, None)
 
     @property

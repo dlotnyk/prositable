@@ -131,7 +131,7 @@ class MainTableDb(LocalDb):
                  db.Column(MainTableColumns.c_name, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_surname, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_known_from, db.Enum, nullable=False),
-                 db.Column(MainTableColumns.c_phone, db.Integer, nullable=True),
+                 db.Column(MainTableColumns.c_phone, db.String, nullable=True),
                  db.Column(MainTableColumns.c_address, db.Unicode, nullable=True),
                  db.Column(MainTableColumns.c_education, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_email, db.String, nullable=True),

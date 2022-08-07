@@ -18,7 +18,7 @@ class MainTable(Base):
     surname = db.Column(db.Unicode, nullable=False)
     known_from = db.Column(db.Enum(KnownFrom), nullable=False)
     first_contact = db.Column(db.Date, nullable=True)
-    phone = db.Column(db.Integer, nullable=True, unique=True)
+    phone = db.Column(db.String, nullable=True)
     address = db.Column(db.Unicode, nullable=True)
     education = db.Column(db.Enum(Education), nullable=True)
     email = db.Column(db.String, nullable=True, unique=True)
