@@ -4,7 +4,6 @@ from sqlalchemy.exc import OperationalError
 
 from db_create.default_table import DefaultTable
 from defs.main_table_columns import MainTableColumns
-from db_create.mediator import BaseComponent
 from defs.basic_defs import WorkType, FamilyStatus, Education, KnownFrom, Cities
 from schemas.table_schemas import MainTable, main_table_name
 from defs.main_table_params import MainTableParams
@@ -12,7 +11,7 @@ from logger import log_settings
 app_log = log_settings()
 
 
-class OperateMainTable(DefaultTable, BaseComponent):
+class OperateMainTable(DefaultTable):
     _table_name = main_table_name
     _table_base = MainTable
 

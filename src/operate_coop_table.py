@@ -1,13 +1,12 @@
 from db_create.default_table import DefaultTable
 from defs.basic_defs import CoopType
-from db_create.mediator import BaseComponent
 from schemas.coop_table_schema import coop_table_suffix, create_coop_table
 from defs.coop_table_params import CoopTableParams
 from logger import log_settings
 app_log = log_settings()
 
 
-class OperateCoopTable(DefaultTable, BaseComponent):
+class OperateCoopTable(DefaultTable):
 
     def __init__(self, cid: int, name: str, surname: str) -> None:
         super().__init__(cid=cid)
