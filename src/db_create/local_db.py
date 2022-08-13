@@ -9,13 +9,14 @@ from schemas.table_schemas import Base, main_table_name
 from schemas.client_table_schema import client_table_suffix, create_client_table
 from schemas.coop_table_schema import coop_table_suffix, create_coop_table
 
+from db_create.mediator import BaseComponent
 from defs.main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
 from dbs.db_defs import local_db_name
 from logger import log_settings
 app_log = log_settings()
 
 
-class LocalDb:
+class LocalDb(BaseComponent):
     """
     local db based of sqlite3
     """
@@ -25,6 +26,7 @@ class LocalDb:
     _table_base = None
 
     def __init__(self, cid=None, name=None, surname=None) -> None:
+        BaseComponent().__init__()
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
@@ -161,10 +163,19 @@ class MainTableDb(LocalDb):
 class ClientTableDb(LocalDb):
 
     def __init__(self, cid: int, name: str, surname: str):
-        self._id = cid
-        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
-        _, self._table_base = create_client_table(self._table_name)
-        super().__init__()
+        try:
+            assert cid is None, "`cid` must provided"
+            assert name is None, "`name` must provided"
+            assert surname is None, "`surname` must provided"
+            self._id = cid
+            self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
+            _, self._table_base = create_client_table(self._table_name)
+            super().__init__()
+        except AssertionError as ex:
+            app_log.error(f"{repr(self)}: {ex}")
+
+    def __repr__(self) -> str:
+        return "ClientTableDb"
 
     def create_table(self):
         metadata = db.MetaData()

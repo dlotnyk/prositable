@@ -4,6 +4,7 @@ from sqlalchemy.exc import OperationalError
 
 from db_create.default_table import DefaultTable
 from defs.main_table_columns import MainTableColumns
+from db_create.mediator import BaseComponent
 from defs.basic_defs import WorkType, FamilyStatus, Education, KnownFrom, Cities
 from schemas.table_schemas import MainTable, main_table_name
 from defs.main_table_params import MainTableParams
@@ -11,12 +12,12 @@ from logger import log_settings
 app_log = log_settings()
 
 
-class OperateMainTable(DefaultTable):
+class OperateMainTable(DefaultTable, BaseComponent):
     _table_name = main_table_name
     _table_base = MainTable
 
     def __init__(self) -> None:
-        super().__init__()
+        DefaultTable().__init__()
 
     def _select_id(self) -> List:
         try:
@@ -35,7 +36,8 @@ class OperateMainTable(DefaultTable):
     def _is_valid_id(self, cid: int) -> bool:
         return cid in self._select_id()
 
-    def _is_rename(self, args: Tuple) -> bool:
+    @staticmethod
+    def _is_rename(args: Tuple) -> bool:
         try:
             return args[2] is True
         except IndexError:
@@ -44,6 +46,7 @@ class OperateMainTable(DefaultTable):
     def execute_update(func):
         def inner(self, *args, **kwargs):
             self._open()
+            print(func.__name__)
             try:
                 cid = args[0]
                 if self._is_valid_id(cid):

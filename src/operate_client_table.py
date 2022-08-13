@@ -1,12 +1,13 @@
 from db_create.default_table import DefaultTable
 from defs.basic_defs import ClientType
+from db_create.mediator import BaseComponent
 from schemas.client_table_schema import client_table_suffix, create_client_table
 from defs.client_table_params import ClientTableParams
 from logger import log_settings
 app_log = log_settings()
 
 
-class OperateClientTable(DefaultTable):
+class OperateClientTable(DefaultTable, BaseComponent):
 
     def __init__(self, cid: int, name: str, surname: str) -> None:
         super().__init__(cid=cid)
