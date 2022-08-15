@@ -3,6 +3,7 @@ from schemas.client_table_schema import client_table_suffix
 from schemas.coop_table_schema import coop_table_suffix
 from db_create.local_db import ClientTableDb, CoopTableDb
 from logger import log_settings
+from defs.update_settings import UpdateSettings
 app_log = log_settings()
 
 
@@ -24,24 +25,24 @@ class UpdateTableNames:
     _change_func_list: Tuple = (_c_update_id, _c_update_name, _c_update_surname)
     _func_name: Optional[str] = None
 
-    def __init__(self, **kwargs) -> None:
-        try:
-            self._old_id: Optional[int] = None
-            self._new_id: Optional[int] = None
-            self._name: Optional[str] = None
-            self._old_name: Optional[str] = None
-            self._new_name: Optional[str] = None
-            self._surname: Optional[str] = None
-            self._old_surname: Optional[str] = None
-            self._new_surname: Optional[str] = None
-            assert kwargs.get(self._c_func_name) is not None, "No func name"
-            self._func_name = kwargs.get(self._c_func_name)
-            assert self._func_name in self._change_func_list, "Wrong func name"
-            self._func_name_id(kwargs)
-            self._func_name_name(kwargs)
-            self._func_name_surname(kwargs)
-        except AssertionError as ex:
-            app_log.error(f"{repr(self)}: {ex}")
+    def __init__(self, settings: UpdateSettings) -> None:
+        # try:
+        #     self._old_id: Optional[int] = None
+        #     self._new_id: Optional[int] = None
+        #     self._name: Optional[str] = None
+        #     self._old_name: Optional[str] = None
+        #     self._new_name: Optional[str] = None
+        #     self._surname: Optional[str] = None
+        #     self._old_surname: Optional[str] = None
+        #     self._new_surname: Optional[str] = None
+        #     assert kwargs.get(self._c_func_name) is not None, "No func name"
+        #     self._func_name = kwargs.get(self._c_func_name)
+        #     assert self._func_name in self._change_func_list, "Wrong func name"
+        #     self._func_name_id(kwargs)
+        #     self._func_name_name(kwargs)
+        #     self._func_name_surname(kwargs)
+        # except AssertionError as ex:
+        #     app_log.error(f"{repr(self)}: {ex}")
 
     def __repr__(self) -> str:
         return "UpdateTableNames"
