@@ -4,7 +4,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import OperationalError
 import os
-from typing import Optional
+from typing import Optional, List
 from schemas.table_schemas import Base, main_table_name
 from schemas.client_table_schema import client_table_suffix, create_client_table
 from schemas.coop_table_schema import coop_table_suffix, create_coop_table
@@ -25,7 +25,6 @@ class LocalDb:
     _table_base = None
 
     def __init__(self, cid=None, name=None, surname=None) -> None:
-        BaseComponent().__init__()
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
@@ -46,6 +45,9 @@ class LocalDb:
     @property
     def db_engine(self) -> Engine:
         return self._db_engine
+
+    def get_table_names(self) -> List:
+        return self._db_engine.table_names()
 
     def open_session(self):
         """

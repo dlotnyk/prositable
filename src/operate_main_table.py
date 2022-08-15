@@ -1,5 +1,5 @@
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from sqlalchemy.exc import OperationalError
 
 from db_create.default_table import DefaultTable
@@ -45,16 +45,19 @@ class OperateMainTable(DefaultTable):
     def execute_update(func):
         def inner(self, *args, **kwargs):
             self._open()
-            print(func.__name__)
+            is_fine = True
             try:
                 cid = args[0]
+                print(self._dbase.get_table_names())
                 if self._is_valid_id(cid):
                     func(self, *args, **kwargs)
                     self._dbase.session.commit()
                     app_log.info(f"Update of `{self._table_base.__tablename__}`")
                 else:
+                    is_fine = False
                     app_log.info(f"`{cid}` is not in {self._table_base.__tablename__}")
             except Exception as ex:
+                is_fine = False
                 app_log.error(f"Can not updated from {self._table_base.__tablename__}: {ex}")
             finally:
                 self._close()
@@ -203,12 +206,12 @@ class OperateMainTable(DefaultTable):
             update({MainTableColumns.c_surname: surname}, synchronize_session="fetch")
 
     @execute_update
-    def update_name(self, client_id: int, name: str) -> None:
+    def update_name(self, client_id: int, name: str, rename: bool) -> None:
         self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
             update({MainTableColumns.c_name: name}, synchronize_session="fetch")
 
     @execute_update
-    def update_id(self, client_id: int, cid: int) -> None:
+    def update_id(self, client_id: int, cid: int, rename: bool) -> None:
         self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
             update({MainTableColumns.c_client_id: cid}, synchronize_session="fetch")
 
@@ -233,8 +236,8 @@ if __name__ == "__main__":
                                     city=Cities.Kosice)
     OperateMainTable().update_title(2, "PhD")
     OperateMainTable().update_surname(2, "Ann", True)
+    OperateMainTable().update_id(2, 3, True)
     resp = OperateMainTable().select_all()
     for item in resp:
         print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "
               f"{item.phone} - {item.city}")
-
