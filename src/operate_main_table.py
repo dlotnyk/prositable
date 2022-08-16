@@ -20,22 +20,6 @@ class OperateMainTable(DefaultTable):
     def __init__(self) -> None:
         DefaultTable().__init__()
 
-    def _select_id(self) -> List:
-        try:
-            self._open()
-            if self._dbase and self._dbase.session and self.table_base:
-                resp = self._dbase.session.query(self.table_base.client_id).all()
-                return [i[0] for i in resp]
-            return list()
-        except OperationalError as oe:
-            oo = str(oe)
-            app_log.error(f"{oo}")
-            return list()
-        finally:
-            self._close()
-
-    def _is_valid_id(self, cid: int) -> bool:
-        return cid in self._select_id()
 
     @staticmethod
     def _is_rename(args: Tuple) -> bool:
@@ -241,7 +225,7 @@ if __name__ == "__main__":
                                     city=Cities.Kosice)
     # OperateMainTable().update_title(2, "PhD")
     # OperateMainTable().update_surname(2, "Ann", True)
-    OperateMainTable().update_surname(3, "rk", True)
+    OperateMainTable().update_surname(2, "rr", True)
     resp = OperateMainTable().select_all()
     for item in resp:
         print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "

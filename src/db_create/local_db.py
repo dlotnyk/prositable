@@ -28,7 +28,11 @@ class LocalDb:
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
-            connector = "sqlite:////" + db_path
+            if os.name == "nt":
+                sq_prefix = "sqlite:///"
+            else:
+                sq_prefix = "sqlite:////"
+            connector = sq_prefix + db_path
             self._db_engine: Engine = db.create_engine(connector)
             app_log.debug(f"Engine creates for {self._db_name}")
         except Exception as ex:
