@@ -7,6 +7,8 @@ from defs.main_table_columns import MainTableColumns
 from defs.basic_defs import WorkType, FamilyStatus, Education, KnownFrom, Cities
 from schemas.table_schemas import MainTable, main_table_name
 from defs.main_table_params import MainTableParams
+from update_table_names import UpdateTableNames
+from defs.update_settings import UpdateSettings
 from logger import log_settings
 app_log = log_settings()
 
@@ -61,6 +63,9 @@ class OperateMainTable(DefaultTable):
                 app_log.error(f"Can not updated from {self._table_base.__tablename__}: {ex}")
             finally:
                 self._close()
+                if is_fine and self._is_rename(args):
+                    inst = UpdateSettings(func.__name__, args, self._dbase.get_table_names())
+                    UpdateTableNames(inst)
         return inner
 
     def insert_entry(self, **kwargs) -> None:
@@ -236,7 +241,7 @@ if __name__ == "__main__":
                                     city=Cities.Kosice)
     # OperateMainTable().update_title(2, "PhD")
     # OperateMainTable().update_surname(2, "Ann", True)
-    # OperateMainTable().update_id(2, 3, True)
+    OperateMainTable().update_surname(3, "rk", True)
     resp = OperateMainTable().select_all()
     for item in resp:
         print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "

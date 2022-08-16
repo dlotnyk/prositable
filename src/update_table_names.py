@@ -52,6 +52,6 @@ class UpdateTableNames:
 
 
 if __name__ == "__main__":
-    a = ['client_history_mm_NewName_3', 'coop_history_mm_NewName_3', 'main_table']
-    b = UpdateSettings("update_name", (2, 3, ), a)
+    a = ['client_history_mm_sa_2', 'coop_history_mm_sa_2', 'main_table']
+    b = UpdateSettings("update_name", (2, "ma", ), a)
     UpdateTableNames(b)
