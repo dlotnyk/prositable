@@ -234,9 +234,9 @@ if __name__ == "__main__":
                                     family_status=FamilyStatus.single,
                                     known_from=KnownFrom.university,
                                     city=Cities.Kosice)
-    OperateMainTable().update_title(2, "PhD")
-    OperateMainTable().update_surname(2, "Ann", True)
-    OperateMainTable().update_id(2, 3, True)
+    # OperateMainTable().update_title(2, "PhD")
+    # OperateMainTable().update_surname(2, "Ann", True)
+    # OperateMainTable().update_id(2, 3, True)
     resp = OperateMainTable().select_all()
     for item in resp:
         print(f"{item.client_id} - {item.name} - {item.surname} - {item.known_from} - {item.birth} - {item.age} - "

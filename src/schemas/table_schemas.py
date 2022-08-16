@@ -53,8 +53,8 @@ class MainTable(Base):
             self.children = params.children
             self.income = params.income
             self.income2 = params.income2
-        except KeyError:
-            pass
+        except KeyError as ex:
+            print(f"{ex}")
 
     def __repr__(self):
         return "MainTable"

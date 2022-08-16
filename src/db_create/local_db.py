@@ -10,7 +10,7 @@ from schemas.client_table_schema import client_table_suffix, create_client_table
 from schemas.coop_table_schema import coop_table_suffix, create_coop_table
 
 from defs.main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
-from dbs.db_defs import local_db_name
+from dbs.db_defs import local_db_name, db_path
 from logger import log_settings
 app_log = log_settings()
 
@@ -28,9 +28,6 @@ class LocalDb:
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
-            cur_path = os.path.dirname(os.getcwd())
-            dbs_path = os.path.join(cur_path, "dbs")
-            db_path = os.path.join(dbs_path, self._db_name)
             connector = "sqlite:///" + db_path
             self._db_engine: Engine = db.create_engine(connector)
             app_log.debug(f"Engine creates for {self._db_name}")
@@ -144,19 +141,20 @@ class MainTableDb(LocalDb):
                  db.Column(MainTableColumns.c_name, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_surname, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_known_from, db.Enum, nullable=False),
+                 db.Column(MainTableColumns.c_first_contact, db.Date, nullable=True),
                  db.Column(MainTableColumns.c_phone, db.String, nullable=True),
                  db.Column(MainTableColumns.c_address, db.Unicode, nullable=True),
                  db.Column(MainTableColumns.c_education, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_email, db.String, nullable=True),
                  db.Column(MainTableColumns.c_birth, db.Date, nullable=True),
                  db.Column(MainTableColumns.c_age, db.Integer, nullable=True),
-                 db.Column(MainTableColumns.c_income, db.Float, nullable=True),
-                 db.Column(MainTableColumns.c_income2, db.Float, nullable=True),
                  db.Column(MainTableColumns.c_work_type, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_family_status, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_children, db.Float, nullable=True),
                  db.Column(MainTableColumns.c_title, db.String, nullable=True),
-                 db.Column(MainTableColumns.c_city, db.Enum, nullable=True)
+                 db.Column(MainTableColumns.c_city, db.Enum, nullable=True),
+                 db.Column(MainTableColumns.c_income, db.Float, nullable=True),
+                 db.Column(MainTableColumns.c_income2, db.Float, nullable=True)
                  )
         self._create_process()
 
