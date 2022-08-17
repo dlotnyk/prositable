@@ -1,7 +1,7 @@
-from typing import Set, Dict, Optional
+from typing import Dict, Optional
 from datetime import date
-from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
-from main_table_columns import MainTableColumns
+from defs.basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
+from defs.main_table_columns import MainTableColumns
 
 
 class MainTableParams:
@@ -43,7 +43,7 @@ class MainTableParams:
         return self._params.get(MainTableColumns.c_first_contact, None)
 
     @property
-    def phone(self) -> Optional[int]:
+    def phone(self) -> Optional[str]:
         return self._params.get(MainTableColumns.c_phone, None)
 
     @property

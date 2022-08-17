@@ -1,6 +1,6 @@
 from typing import Dict
 from datetime import date
-from main_table_columns import ClientTableColumns
+from defs.main_table_columns import ClientTableColumns
 
 
 class ClientTableParams:

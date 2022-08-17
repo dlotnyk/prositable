@@ -1,8 +1,8 @@
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 
-from basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
-from main_table_params import MainTableParams
+from defs.basic_defs import KnownFrom, Cities, Education, WorkType, FamilyStatus
+from defs.main_table_params import MainTableParams
 Base = declarative_base()
 
 main_table_name = "main_table"
@@ -18,7 +18,7 @@ class MainTable(Base):
     surname = db.Column(db.Unicode, nullable=False)
     known_from = db.Column(db.Enum(KnownFrom), nullable=False)
     first_contact = db.Column(db.Date, nullable=True)
-    phone = db.Column(db.Integer, nullable=True, unique=True)
+    phone = db.Column(db.String, nullable=True)
     address = db.Column(db.Unicode, nullable=True)
     education = db.Column(db.Enum(Education), nullable=True)
     email = db.Column(db.String, nullable=True, unique=True)
@@ -53,8 +53,8 @@ class MainTable(Base):
             self.children = params.children
             self.income = params.income
             self.income2 = params.income2
-        except KeyError:
-            pass
+        except KeyError as ex:
+            print(f"{ex}")
 
     def __repr__(self):
         return "MainTable"

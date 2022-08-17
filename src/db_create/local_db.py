@@ -4,13 +4,13 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import OperationalError
 import os
-from typing import Optional
-from table_schemas import Base, main_table_name
-from client_table_schema import client_table_suffix, create_client_table
-from coop_table_schema import coop_table_suffix, create_coop_table
+from typing import Optional, List
+from schemas.table_schemas import Base, main_table_name
+from schemas.client_table_schema import client_table_suffix, create_client_table
+from schemas.coop_table_schema import coop_table_suffix, create_coop_table
 
-from main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
-from dbs.db_defs import local_db_name
+from defs.main_table_columns import MainTableColumns, ClientTableColumns, CoopTableColumns
+from dbs.db_defs import local_db_name, db_path
 from logger import log_settings
 app_log = log_settings()
 
@@ -28,10 +28,11 @@ class LocalDb:
         self.is_ok = True
         try:
             self._session: Optional[Session] = None
-            cur_path = os.path.dirname(os.getcwd())
-            dbs_path = os.path.join(cur_path, "dbs")
-            db_path = os.path.join(dbs_path, self._db_name)
-            connector = "sqlite:///" + db_path
+            if os.name == "nt":
+                sq_prefix = "sqlite:///"
+            else:
+                sq_prefix = "sqlite:////"
+            connector = sq_prefix + db_path
             self._db_engine: Engine = db.create_engine(connector)
             app_log.debug(f"Engine creates for {self._db_name}")
         except Exception as ex:
@@ -45,6 +46,9 @@ class LocalDb:
     @property
     def db_engine(self) -> Engine:
         return self._db_engine
+
+    def get_table_names(self) -> List:
+        return self._db_engine.table_names()
 
     def open_session(self):
         """
@@ -112,6 +116,16 @@ class LocalDb:
         except Exception as ex:
             app_log.error(f"Column not dropped: {ex}")
 
+    def rename_table(self, old_name: str, new_name: str):
+        try:
+            self._db_engine.execute(f"ALTER TABLE {old_name} "
+                                    f"RENAME TO {new_name}")
+            app_log.info(f"Table renamed to `{new_name}`")
+        except OperationalError as ee:
+            app_log.info(f"{ee}")
+        except Exception as ex:
+            app_log.error(f"Table not renamed to: {ex}")
+
     @abstractmethod
     def create_table(self):
         pass
@@ -131,19 +145,20 @@ class MainTableDb(LocalDb):
                  db.Column(MainTableColumns.c_name, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_surname, db.Unicode, nullable=False),
                  db.Column(MainTableColumns.c_known_from, db.Enum, nullable=False),
-                 db.Column(MainTableColumns.c_phone, db.Integer, nullable=True),
+                 db.Column(MainTableColumns.c_first_contact, db.Date, nullable=True),
+                 db.Column(MainTableColumns.c_phone, db.String, nullable=True),
                  db.Column(MainTableColumns.c_address, db.Unicode, nullable=True),
                  db.Column(MainTableColumns.c_education, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_email, db.String, nullable=True),
                  db.Column(MainTableColumns.c_birth, db.Date, nullable=True),
                  db.Column(MainTableColumns.c_age, db.Integer, nullable=True),
-                 db.Column(MainTableColumns.c_income, db.Float, nullable=True),
-                 db.Column(MainTableColumns.c_income2, db.Float, nullable=True),
                  db.Column(MainTableColumns.c_work_type, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_family_status, db.Enum, nullable=True),
                  db.Column(MainTableColumns.c_children, db.Float, nullable=True),
                  db.Column(MainTableColumns.c_title, db.String, nullable=True),
-                 db.Column(MainTableColumns.c_city, db.Enum, nullable=True)
+                 db.Column(MainTableColumns.c_city, db.Enum, nullable=True),
+                 db.Column(MainTableColumns.c_income, db.Float, nullable=True),
+                 db.Column(MainTableColumns.c_income2, db.Float, nullable=True)
                  )
         self._create_process()
 
@@ -151,10 +166,19 @@ class MainTableDb(LocalDb):
 class ClientTableDb(LocalDb):
 
     def __init__(self, cid: int, name: str, surname: str):
-        self._id = cid
-        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
-        _, self._table_base = create_client_table(self._table_name)
-        super().__init__()
+        try:
+            assert cid is not None, "`cid` must provided"
+            assert name is not None, "`name` must provided"
+            assert surname is not None, "`surname` must provided"
+            self._id = cid
+            self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
+            _, self._table_base = create_client_table(self._table_name)
+            super().__init__()
+        except AssertionError as ex:
+            app_log.error(f"{repr(self)}: {ex}")
+
+    def __repr__(self) -> str:
+        return "ClientTableDb"
 
     def create_table(self):
         metadata = db.MetaData()
@@ -172,10 +196,19 @@ class ClientTableDb(LocalDb):
 class CoopTableDb(LocalDb):
 
     def __init__(self, cid: int, name: str, surname: str):
-        self._id = cid
-        self._table_name = coop_table_suffix + name + self._separator + surname + self._separator + str(cid)
-        _, self._table_base = create_coop_table(self._table_name)
-        super().__init__()
+        try:
+            assert cid is not None, "`cid` must provided"
+            assert name is not None, "`name` must provided"
+            assert surname is not None, "`surname` must provided"
+            self._id = cid
+            self._table_name = coop_table_suffix + name + self._separator + surname + self._separator + str(cid)
+            _, self._table_base = create_coop_table(self._table_name)
+            super().__init__()
+        except AssertionError as ex:
+            app_log.error(f"{repr(self)}: {ex}")
+
+    def __repr__(self) -> str:
+        return "CoopTableDb"
 
     def create_table(self):
         metadata = db.MetaData()
@@ -191,13 +224,7 @@ class CoopTableDb(LocalDb):
 
 
 if __name__ == "__main__":
-    a = MainTableDb()
-    a.create_table()
-    # a.drop_column("income3")
-    # a.add_column("income4", "FLOAT")
-    a.close_engine()
-    # b = ClientTableDb(client_id=0, name="name", surname="surname")
-    # b.create_table()
-    # b.add_column("test", "FLOAT")
-    # b.drop_column("test")
-    # b.close_engine()
+    b = MainTableDb()
+    b.create_table()
+    b.close_engine()
+

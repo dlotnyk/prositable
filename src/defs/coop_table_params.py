@@ -1,6 +1,6 @@
 from typing import Dict
 from datetime import date
-from main_table_columns import CoopTableColumns
+from defs.main_table_columns import CoopTableColumns
 
 
 class CoopTableParams:

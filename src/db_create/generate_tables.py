@@ -1,7 +1,7 @@
-from typing import Optional, List
-from tables import OperateMainTable
-from local_db import ClientTableDb, LocalDb, CoopTableDb
-from table_schemas import MainTable
+from typing import List
+from operate_main_table import OperateMainTable
+from db_create.local_db import ClientTableDb, LocalDb, CoopTableDb
+from schemas.table_schemas import MainTable
 from logger import log_settings
 app_log = log_settings()
 
@@ -52,3 +52,7 @@ if __name__ == "__main__":
     for item in a.details_list:
         print(f"{item.cid} - {item.name} - {item.surname}")
     a.create_client_tables()
+    b = GenerateTables(ClientTableDb)
+    for item in b.details_list:
+        print(f"{item.cid} - {item.name} - {item.surname}")
+    b.create_client_tables()

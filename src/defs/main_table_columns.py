@@ -20,22 +20,22 @@ class MainTableColumns:
     c_test = "test"
 
 
-class ClientTableColumns:
+class AuxTableColumns:
     c_entry_id = "entry_id"
     c_date = "date"
+    c_tasks = "tasks"
+    c_notes = "notes"
+
+
+class ClientTableColumns(AuxTableColumns):
     c_client_type = "client_type"
-    c_tasks = "tasks"
-    c_notes = "notes"
 
 
-class CoopTableColumns:
-    c_entry_id = "entry_id"
-    c_date = "date"
+class CoopTableColumns(AuxTableColumns):
     c_coop_type = "coop_type"
-    c_tasks = "tasks"
-    c_notes = "notes"
 
 
 if __name__ == "__main__":
     print(MainTableColumns.c_client_id)
+    print(ClientTableColumns.c_entry_id)
 
