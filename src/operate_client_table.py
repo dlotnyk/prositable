@@ -1,4 +1,4 @@
-from db_create.default_table import DefaultTable
+from db_create.default_table import AuxTable
 from defs.basic_defs import ClientType
 from schemas.client_table_schema import client_table_suffix, create_client_table
 from defs.client_table_params import ClientTableParams
@@ -6,11 +6,11 @@ from logger import log_settings
 app_log = log_settings()
 
 
-class OperateClientTable(DefaultTable):
+class OperateClientTable(AuxTable):
+    _tab_prefix = client_table_suffix
 
     def __init__(self, cid: int, name: str, surname: str) -> None:
-        super().__init__(cid=cid)
-        self._table_name = client_table_suffix + name + self._separator + surname + self._separator + str(cid)
+        super().__init__(cid=cid, name=name, surname=surname)
         self._table_base, _ = create_client_table(self._table_name)
 
     def insert_entry(self, **kwargs) -> None:
@@ -31,15 +31,19 @@ class OperateClientTable(DefaultTable):
 
 
 if __name__ == "__main__":
-    OperateClientTable(cid=2,
-                       name="Name",
-                       surname="Surname").insert_entry(client_type=ClientType.MZ,
-                                                       date="2022-08-02",
-                                                       tasks="to do",
-                                                       notes="notes")
-    resp = OperateClientTable(cid=2,
-                              name="Name",
-                              surname="Surname").select_all()
+    # OperateClientTable(cid=3,
+    #                    name="sm",
+    #                    surname="rk").insert_entry(client_type=ClientType.MZ,
+    #                                                    date="2022-08-02",
+    #                                                    tasks="to do",
+    #                                                    notes="notes")
+    OperateClientTable(cid=3,
+                       name="sm",
+                       surname="rk").update_client_type(2, ClientType.DNK)
+
+    resp = OperateClientTable(cid=3,
+                              name="sm",
+                              surname="rk").select_all()
     for item in resp:
         print(f"{item.entry_id} - {item.client_type} - {item.date} - "
               f"{item.tasks} - {item.notes}")

@@ -4,7 +4,8 @@ from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError, OperationalError
 
 from schemas.table_schemas import Base
-from defs.main_table_columns import AuxTableColumns
+from defs.basic_defs import ClientType, CoopType
+from defs.main_table_columns import AuxTableColumns, ClientTableColumns, CoopTableColumns
 from db_create.local_db import LocalDb
 from logger import log_settings
 app_log = log_settings()
@@ -89,7 +90,7 @@ class DefaultTable:
         try:
             self._open()
             if self._dbase and self._dbase.session and self.table_base:
-                resp = self._dbase.session.query(self.table_base.client_id).all()
+                resp = self._dbase.session.query(self.table_base.entry_id).all()
                 return [i[0] for i in resp]
             return list()
         except OperationalError as oe:
@@ -142,3 +143,13 @@ class AuxTable(DefaultTable):
     def update_tasks(self, entry_id: int, task: str):
         self._dbase.session.query(self._table_base).filter(self._table_base.entry_id == entry_id). \
             update({AuxTableColumns.c_tasks: task}, synchronize_session="fetch")
+
+    @execute_update
+    def update_coop_type(self, entry_id: int, ctype: CoopType):
+        self._dbase.session.query(self._table_base).filter(self._table_base.entry_id == entry_id). \
+            update({CoopTableColumns.c_coop_type: ctype}, synchronize_session="fetch")
+
+    @execute_update
+    def update_client_type(self, entry_id: int, ctype: ClientType):
+        self._dbase.session.query(self._table_base).filter(self._table_base.entry_id == entry_id). \
+            update({ClientTableColumns.c_client_type: ctype}, synchronize_session="fetch")
