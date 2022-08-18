@@ -1,5 +1,4 @@
 from typing import Optional, List, Tuple
-from abc import abstractmethod
 from datetime import datetime, date
 from sqlalchemy.exc import IntegrityError, OperationalError
 

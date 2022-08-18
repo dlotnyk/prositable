@@ -31,6 +31,10 @@ class MainTableParams:
             raise KeyError(f"{MainTableColumns.c_surname} not defined")
 
     @property
+    def rc(self) -> int:
+        return self._params.get(MainTableColumns.c_rc, None)
+
+    @property
     def known_from(self) -> KnownFrom:
         resp = self._params.get(MainTableColumns.c_known_from, None)
         if resp:
