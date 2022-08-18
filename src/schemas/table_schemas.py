@@ -16,6 +16,7 @@ class MainTable(Base):
     client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode, nullable=False)
     surname = db.Column(db.Unicode, nullable=False)
+    rc = db.Column(db.Integer, nullable=True)
     known_from = db.Column(db.Enum(KnownFrom), nullable=False)
     first_contact = db.Column(db.Date, nullable=True)
     phone = db.Column(db.String, nullable=True)
@@ -38,6 +39,7 @@ class MainTable(Base):
             self.client_id = params.client_id
             self.name = params.name
             self.surname = params.surname
+            self.rc = params.rc
             self.known_from = params.known_from
             self.first_contact = params.first_contact
             self.phone = params.phone
