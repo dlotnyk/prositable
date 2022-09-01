@@ -247,10 +247,10 @@ if __name__ == "__main__":
                                     income=1000,
                                     income2=0,
                                     first_contact="2022-07-29",
-                                    work_type=WorkType.worker,
-                                    family_status=FamilyStatus.single,
+                                    work_type=WorkType.business,
+                                    family_status=FamilyStatus.married,
                                     known_from=KnownFrom.university,
-                                    city=Cities.Kosice)
+                                    city=Cities.Bratislava)
     # OperateMainTable().update_title(2, "PhD")
     # OperateMainTable().update_surname(2, "Ann", True)
     # OperateMainTable().update_surname(2, "rr", True)
