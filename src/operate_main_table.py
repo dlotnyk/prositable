@@ -74,7 +74,7 @@ class OperateMainTable(DefaultTable):
         income2 = params.income2
         trvaly_pobyt = params.trvaly_pobyt
         nationality = params.nationality
-        pass_number = params.pass_number
+        op_number = params.op_number
         contact, _ = self._get_birth(first_contact)
         birthday, c_age = self._get_birth(birth)
         if c_age:
@@ -100,7 +100,7 @@ class OperateMainTable(DefaultTable):
                                 city=city,
                                 trvaly_pobyt=trvaly_pobyt,
                                 nationality=nationality,
-                                pass_number=pass_number)
+                                op_number=op_number)
         self._insert_data(data)
 
     def delete_entry(self, client_id: int) -> None:
@@ -212,9 +212,9 @@ class OperateMainTable(DefaultTable):
             update({MainTableColumns.c_nationality: nationality}, synchronize_session="fetch")
 
     @execute_update
-    def update_pass_number(self, client_id: int, pass_number: str) -> None:
+    def update_op_number(self, client_id: int, op_number: str) -> None:
         self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
-            update({MainTableColumns.c_pass_number: pass_number}, synchronize_session="fetch")
+            update({MainTableColumns.c_op_number: op_number}, synchronize_session="fetch")
 
     @execute_update
     def update_surname(self, client_id: int, surname: str, rename: bool) -> None:
@@ -233,20 +233,20 @@ class OperateMainTable(DefaultTable):
 
 
 if __name__ == "__main__":
-    OperateMainTable().insert_entry(client_id=2,
-                                    name="mm",
-                                    surname="sa",
+    OperateMainTable().insert_entry(client_id=1,
+                                    name="A",
+                                    surname="P",
                                     rc=0,
                                     birth="",
-                                    phone="",
+                                    phone="+42",
                                     education=Education.higher,
-                                    address="Juzna",
-                                    title="PhD",
-                                    email="",
-                                    children=0,
+                                    address="Blava",
+                                    title="",
+                                    email="aa@gmail.com",
+                                    children=1,
                                     income=1000,
                                     income2=0,
-                                    first_contact="2022-07-29",
+                                    first_contact="2022-08-30",
                                     work_type=WorkType.business,
                                     family_status=FamilyStatus.married,
                                     known_from=KnownFrom.university,

@@ -107,8 +107,8 @@ class MainTableParams:
         return self._params.get(MainTableColumns.c_nationality, None)
 
     @property
-    def pass_number(self) -> Optional[str]:
-        return self._params.get(MainTableColumns.c_pass_number, None)
+    def op_number(self) -> Optional[str]:
+        return self._params.get(MainTableColumns.c_op_number, None)
 
 
 if __name__ == "__main__":

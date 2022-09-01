@@ -34,7 +34,7 @@ class MainTable(Base):
     income2 = db.Column(db.Float, nullable=True)
     trvaly_pobyt = db.Column(db.Unicode, nullable=True)
     nationality = db.Column(db.Unicode, nullable=True)
-    pass_number = db.Column(db.Unicode, nullable=True)
+    op_number = db.Column(db.Unicode, nullable=True)
 
     def __init__(self, **kwargs):
         try:
@@ -60,7 +60,7 @@ class MainTable(Base):
             self.income2 = params.income2
             self.trvaly_pobyt = params.trvaly_pobyt
             self.nationality = params.nationality
-            self.pass_number = params.pass_number
+            self.op_number = params.op_number
         except KeyError as ex:
             print(f"{ex}")
 

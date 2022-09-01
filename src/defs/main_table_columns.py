@@ -20,7 +20,7 @@ class MainTableColumns:
     c_income2 = "income2"
     c_trvaly_pobyt = "trvaly_pobyt"
     c_nationality = "nationality"
-    c_pass_number = "pass_number"
+    c_op_number = "op_number"
     c_test = "test"
 
 
