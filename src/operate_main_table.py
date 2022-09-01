@@ -72,6 +72,9 @@ class OperateMainTable(DefaultTable):
         children = params.children
         income = params.income
         income2 = params.income2
+        trvaly_pobyt = params.trvaly_pobyt
+        nationality = params.nationality
+        pass_number = params.pass_number
         contact, _ = self._get_birth(first_contact)
         birthday, c_age = self._get_birth(birth)
         if c_age:
@@ -94,7 +97,10 @@ class OperateMainTable(DefaultTable):
                                 income=income,
                                 income2=income2,
                                 title=title,
-                                city=city)
+                                city=city,
+                                trvaly_pobyt=trvaly_pobyt,
+                                nationality=nationality,
+                                pass_number=pass_number)
         self._insert_data(data)
 
     def delete_entry(self, client_id: int) -> None:
@@ -194,6 +200,21 @@ class OperateMainTable(DefaultTable):
     def update_known_from(self, client_id: int, known: KnownFrom) -> None:
         self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
             update({MainTableColumns.c_known_from: known}, synchronize_session="fetch")
+
+    @execute_update
+    def update_trvaly_pobyt(self, client_id: int, trvaly_pobyt: str) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_trvaly_pobyt: trvaly_pobyt}, synchronize_session="fetch")
+
+    @execute_update
+    def update_nationality(self, client_id: int, nationality: str) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_nationality: nationality}, synchronize_session="fetch")
+
+    @execute_update
+    def update_pass_number(self, client_id: int, pass_number: str) -> None:
+        self._dbase.session.query(self._table_base).filter(self._table_base.client_id == client_id). \
+            update({MainTableColumns.c_pass_number: pass_number}, synchronize_session="fetch")
 
     @execute_update
     def update_surname(self, client_id: int, surname: str, rename: bool) -> None:

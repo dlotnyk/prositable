@@ -225,6 +225,7 @@ class CoopTableDb(LocalDb):
 
 if __name__ == "__main__":
     b = MainTableDb()
-    b.create_table()
+    # b.create_table()
+    b.add_column("trvaly_pobyt", "VARCHAR")
     b.close_engine()
 

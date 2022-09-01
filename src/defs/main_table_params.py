@@ -98,6 +98,18 @@ class MainTableParams:
     def income2(self) -> Optional[float]:
         return self._params.get(MainTableColumns.c_income2, None)
 
+    @property
+    def trvaly_pobyt(self) -> Optional[str]:
+        return self._params.get(MainTableColumns.c_trvaly_pobyt, None)
+
+    @property
+    def nationality(self) -> Optional[str]:
+        return self._params.get(MainTableColumns.c_nationality, None)
+
+    @property
+    def pass_number(self) -> Optional[str]:
+        return self._params.get(MainTableColumns.c_pass_number, None)
+
 
 if __name__ == "__main__":
     params = {"client_id": 111}
